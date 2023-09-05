@@ -138,12 +138,11 @@ fn_status_t nrf_driver_configure(pin_manager_t *user_pins, uint32_t baudrate_hz)
     // store user_pins in global nrf_driver struct
     *pins = *user_pins;
 
-    spi_instance_t instance_pattern[8] = { SPI_0, SPI_0, SPI_1, SPI_1, SPI_0, SPI_0, SPI_1, SPI_1 };
 
     spi_instance_t spi_instances[3] = {
-     instance_pattern[(pins->cipo - CIPO_MIN) / 4],
-     instance_pattern[(pins->copi - COPI_MIN) / 4],
-     instance_pattern[(pins->sck - SCK_MIN) / 4],
+     pins->cipo == 11 || pins->cipo == 15 ? SPI_1 : SPI_0,
+     pins->copi == 12 || pins->copi == 8 ? SPI_1 : SPI_0,
+     pins->sck == 14 || pins->sck == 10 ? SPI_1 : SPI_0,
     };
 
     spi_instance_t count[3] = { 0, 0 }; // SPI_0 (0), SPI_1 (1)
